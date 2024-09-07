@@ -74,6 +74,7 @@ export default function Receipt() {
                 <th className="px-4 py-2 border">ชื่อผู้จอง</th>
                 <th className="px-4 py-2 border">เบอร์โทร</th>
                 <th className="px-4 py-2 border">จำนวนโต๊ะ</th>
+                <th className="px-4 py-2 border">ราคามัดจำ</th>
                 <th className="px-4 py-2 border">ราคารวม</th>
               </tr>
             </thead>
@@ -84,9 +85,11 @@ export default function Receipt() {
                   <td className="px-4 py-2 border">{receipt?.Payment?.booking?.User?.firstname}</td>
                   <td className="px-4 py-2 border">{receipt?.Payment?.booking?.User?.phone }</td>
                   <td className="px-4 py-2 border">{receipt?.Payment?.booking?.Numberoftables }</td>
+                  <td className="px-4 py-2 border">{receipt?.Payment?.deposit_amount}</td>
                   <td className="px-4 py-2 border">
                     {receipt?.Payment?.booking?.Numberoftables * (receipt?.Payment?.booking?.Tables?.tabes_price || 0)}
                   </td>
+                  
                 </tr>
               ))}
             </tbody>

@@ -17,12 +17,16 @@ export default function RegisterForm() {
   });
 
   const hdlChange = (e) => {
-    setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setInput(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const hdlSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validation
     if (!input.username || !input.password || !input.confirmPassword || !input.firstname || !input.lastname || !input.email || !input.phone || !input.address) {
       return Swal.fire({
@@ -35,7 +39,7 @@ export default function RegisterForm() {
         }
       });
     }
-
+  
     if (input.password !== input.confirmPassword) {
       return Swal.fire({
         icon: 'error',
@@ -47,7 +51,7 @@ export default function RegisterForm() {
         }
       });
     }
-
+  
     if (input.password.length < 6) {
       return Swal.fire({
         icon: 'error',
@@ -59,7 +63,7 @@ export default function RegisterForm() {
         }
       });
     }
-
+  
     if (!/^\d{10}$/.test(input.phone)) {
       return Swal.fire({
         icon: 'error',
@@ -71,7 +75,7 @@ export default function RegisterForm() {
         }
       });
     }
-
+  
     try {
       const rs = await axios.post('http://localhost:8889/auth/register', input);
       if (rs.status === 200) {
@@ -86,16 +90,29 @@ export default function RegisterForm() {
         }).then(() => navigate('/login'));
       }
     } catch (err) {
-      if (err.response && err.response.status === 409) {
-        Swal.fire({
-          icon: 'error',
-          title: 'ข้อผิดพลาด',
-          text: 'ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาเลือกชื่อผู้ใช้อื่น',
-          confirmButtonText: 'ตกลง',
-          customClass: {
-            confirmButton: 'bg-green-500 text-white'
-          }
-        });
+      if (err.response) {
+        // if (err.response.status === 409) {
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'ข้อผิดพลาด',
+        //     text: 'ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาเลือกชื่อผู้ใช้อื่น',
+        //     confirmButtonText: 'ตกลง',
+        //     customClass: {
+        //       confirmButton: 'bg-green-500 text-white'
+        //     }
+        //   });
+        // } else 
+        if (err.response.status === 422) {
+          Swal.fire({
+            icon: 'error',
+            title: 'ข้อผิดพลาด',
+            text: 'อีเมลนี้ถูกลงทะเบียนไว้แล้ว',
+            confirmButtonText: 'ตกลง',
+            customClass: {
+              confirmButton: 'bg-green-500 text-white'
+            }
+          });
+        }
       } else {
         Swal.fire({
           icon: 'error',
@@ -110,6 +127,7 @@ export default function RegisterForm() {
       console.log(err.message);
     }
   };
+  
 
   return (
     <div

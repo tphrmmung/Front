@@ -96,7 +96,7 @@ export default function UserHome() {
       }}
     >
       <div className="hero-overlay bg-opacity-30"></div>
-      <div className="hero-content text-center text-neutral-content">
+      <div className="hero-content text-center text-neutral-content mx-auto">
         <div className="w-full p-4 text-center bg-red-900">
           <h1 className="text-3xl font-bold mb-4">รับจัดโต๊ะจีน งานเลี้ยง</h1>
           <p className="mb-6">

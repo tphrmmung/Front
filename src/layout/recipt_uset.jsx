@@ -24,7 +24,7 @@ export default function recipt_user() {
   return (
     <form
       className="flex flex-col min-w-[600px] border rounded w-5 mx-auto p-4 gap-6 mt-10"
-      onSubmit={hdlSubmit}
+      // onSubmit={hdlSubmit}
     >
       <div className="form-control text-center text-3xl mb-2">รายละเอียดการจอง</div>
       <label>

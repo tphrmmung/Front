@@ -47,12 +47,12 @@ export default function Booking() {
       confirmButtonText: "ใช่, อนุมัติเลย!",
     }).then((result) => {
       if (result.isConfirmed) {
-        updateStatus(bookingId, "approve");
+        updateStatus(bookingId);
       }
     });
   };
 
-  const handleCancellation = (bookingId) => {
+  const handleCancellation = async (bookingId) => {
     Swal.fire({
       title: "ยกเลิกการจอง",
       text: "กรุณาระบุเหตุผลในการยกเลิก:",
@@ -62,22 +62,44 @@ export default function Booking() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "ยกเลิกการจอง",
-      cancelButtonText: "ยกเลิก"
-    }).then((result) => {
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {  // เปลี่ยนฟังก์ชันเป็น async ในนี้
       if (result.isConfirmed) {
-        const reason = result.value;
-        if (reason) {
-          updateStatus(bookingId, "cancel", reason);
-        } else {
-          Swal.fire("ข้อผิดพลาด", "ต้องกรอกเหตุผลในการยกเลิก", "error");
+        const note = result.value;
+        alert(note)
+        if (note) {
+          try {
+            const rs = await axios.patch(
+              `http://localhost:8889/admin/bookings/status/${bookingId}`,
+              { status: "cancel", note },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            if (rs.status === 200) {
+              Swal.fire({
+                title: "สำเร็จ!",
+                text: "การอัปเดตข้อมูลเสร็จสมบูรณ์",
+                icon: "success",
+                confirmButtonText: "ตกลง",
+                confirmButtonColor: "#3085d6",
+              });
+              setReload(!reload); // โหลดข้อมูลใหม่
+            }
+          } catch (error) {
+            console.log(error)
+            Swal.fire("ข้อผิดพลาด", "ไม่สามารถยกเลิกการจองได้", "error");
+          }
         }
       }
     });
   };
 
-  const updateStatus = async (id, status, reason = '') => {
+  const updateStatus = async (id, note = "") => {
     try {
-      const rs = await axios.patch(`http://localhost:8889/admin/bookings/status/${id}`, { status, reason }, {
+      const rs = await axios.patch(`http://localhost:8889/admin/bookings/status/${id}`, { status: "approve", note }, {
         headers: {
           Authorization: `Bearer ${token}`
         }

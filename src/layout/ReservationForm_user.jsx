@@ -11,9 +11,15 @@ export default function Booking() {
   const navigate = useNavigate();
   const bookingsPerPage = 10;
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     const getBooking = async () => {
-      const rs = await axios.get("http://localhost:8889/admin/bookinguser");
+      const rs = await axios.get("http://localhost:8889/admin/bookinguser", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const sortedBookings = rs.data.booking.sort(
         (a, b) =>
           new Date(b.booking_date_and_time) - new Date(a.booking_date_and_time)
@@ -81,49 +87,57 @@ export default function Booking() {
             <th>สถานะ</th>
             <th>หมายเหตุ</th>
             <th>ชำระเงินมัดจำ</th>
+            <th>การดำเนินงาน</th>
             <th>ใบเสร็จ</th>
           </tr>
         </thead>
         <tbody>
           {currentBookings.map((booking) => (
-            <tr key={booking.booking_id}>
-              <th>{booking.booking_id}</th>
-              <th>{booking.Numberoftables}</th>
-              <th>{booking.Tables?.tabes_price}</th>
+            <tr key={booking.booking.booking_id}>
+              <th>{booking.booking.booking_id}</th>
+              <th>{booking.booking.Numberoftables}</th>
+              <th>{booking.booking.Tables?.tabes_price}</th>
               <th>
-                {booking.Numberoftables * parseInt(booking.Tables?.tabes_price)}
+                {booking.booking.Numberoftables * parseInt(booking.booking.Tables?.tabes_price)}
               </th>
-              <th>{formatDateTime(booking.booking_date_and_time)}</th>
-              <th>{booking.location}</th>
+              <th>{formatDateTime(booking.booking.booking_date_and_time)}</th>
+              <th>{booking.booking.location}</th>
               <th>
-                {booking.bookingstatus === "Waiting" ? (
+                {booking.booking.bookingstatus === "Waiting" ? (
                   <span className="text-amber-500">รอการอนุมัติ</span>
-                ) : booking.bookingstatus === "approve" ? (
+                ) : booking.booking.bookingstatus === "approve" ? (
                   <span className="text-green-600">อนุมัติแล้ว</span>
-                ) : booking.bookingstatus === "cancel" ? (
+                ) : booking.booking.bookingstatus === "cancel" ? (
                   <span className="text-red-600">ยกเลิกแล้ว</span>
-                ) : booking.bookingstatus === "success" ? (
+                ) : booking.booking.bookingstatus === "success" ? (
                   "สำเร็จ"
                 ) : (
                   ""
                 )}
               </th>
-              <th style={{ textAlign: "center" }}>{booking.note || "-"}</th>
+              <th style={{ textAlign: "center" }}>{booking.booking.note || "-"}</th>
               <th className="px-4 py-2 text-left">
-                {booking.bookingstatus === "approve" && (
+                {booking.booking.bookingstatus === "approve" && (
                   <button
                     className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300"
-                    onClick={() => hdlPay(booking.booking_id)}
+                    onClick={() => hdlPay(booking.booking.booking_id)}
                   >
-                    ชำระเงิน
+                     ชำระเงินเเล้ว 
                   </button>
                 )}
               </th>
+              <th> 
+              {booking.paymentstatus === "Pending" ?
+                  <span className="text-amber-500">รอการดำเนินงาน</span>
+                : booking.paymentstatus === "Work" ?
+                  <span className="text-green-600">สำเร็จ</span>
+                : ""}
+                </th>
               <th>
-              {booking.bookingstatus === "approve" && (
+              {booking.paymentstatus === "Work" && (
                 <button
                   className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300"
-                  onClick={() => navigate(`/receipt/${booking.booking_id}`)}
+                  onClick={() => navigate(`/receipt/${booking.Payment_id}`)}
                 >
                   ใบเสร็จ
                 </button>

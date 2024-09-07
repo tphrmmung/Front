@@ -60,7 +60,7 @@ export default function Booking() {
       const rs = await axios.post("http://localhost:8889/admin/bookings", input);
       if (rs.status === 200) {
         const id = rs.data.booking.booking_id;
-        navigate("/ReservationForm_user/");
+        navigate("/WaittingPayment/");
         Swal.fire({
           icon: "success",
           title: "การจองเสร็จสิ้น",

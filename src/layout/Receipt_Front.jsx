@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import html2canvas from "html2canvas";
 
 function Receipt_Front() {
   const id = location.pathname.split("/")[2];
+
   const [receipt, setReceipt] = useState(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function Receipt_Front() {
 
 
   if (!receipt) {
-    return <div>Loading...</div>;
+    return <div className="mt-20">Loading...</div>;
   }
 
   // const componentRef = useRef();
@@ -53,7 +53,7 @@ function Receipt_Front() {
             <div className="flex justify-between font-bold ">
               <p>สถานที่ :  {receipt?.Payment?.booking?.location}</p>
               <div className="flex gap-10 ml-27">
-                <p>ชื่อร้าน: ภัตตาคาร ครัวสยาม </p>
+                <p>ชื่อร้าน: TarnTip เซ็นเตอร์โต๊ะจีน </p>
               </div>
             </div>
             <div className="flex justify-between font-bold mt-3">
@@ -100,7 +100,7 @@ function Receipt_Front() {
             </div>
             <div className="flex justify-between">
               <p className="ml-[2rem] font-bold">มัดจำ</p>
-              <p className="font-bold text-lg">฿ {receipt?.Payment?.remain}</p>
+              <p className="font-bold text-lg">฿ {receipt?.Payment?.deposit_amount}</p>
             </div>
             <div className="flex justify-between">
               <p className="ml-[2rem] font-bold">ราคาสุทธิ</p>

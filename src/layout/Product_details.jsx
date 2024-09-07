@@ -131,10 +131,11 @@ export default function Product_details() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="overflow-x-auto text-xl mt-20 border-2 min-w-[1200px] items-center rounded-md w-full mx-auto p-4 gap-6">
+      <div className="overflow-x-auto text-xl mt-20 border-2 min-w-[1250px] items-center rounded-md w-full mx-auto p-4 gap-6">
         <table className="table-auto w-full text-left border-collapse">
           <thead className="bg-gray-200 text-base font-bold">
             <tr>
+              <th className="px-4 py-2 text-left">id โต๊ะ</th>
               <th className="px-4 py-2 text-left">ภาพ</th>
               <th className="px-4 py-2 text-left">ราคา</th>
               <th className="px-4 py-2 text-left">รายละเอียดโต๊ะ</th>
@@ -144,6 +145,7 @@ export default function Product_details() {
           <tbody>
             {currentProducts.map((pro) => (
               <tr key={pro.Tables_id} className="border-t">
+                <td className="px-4 py-5 text-left ">{pro.Tables_id}</td>
                 <td className="px-4 py-2 text-left">
                   <figure><img src={pro.Tables_img} className="max-w-32 rounded-lg" alt="Table" /></figure>
                 </td>

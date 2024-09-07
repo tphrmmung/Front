@@ -10,7 +10,9 @@ export default function CustomerInformation() {
     const getUsers = async () => {
       try {
         const response = await axios.get("http://localhost:8889/admin/users");
-        setUsers(response.data.users);
+        // Sorting users by user_id in descending order
+        const sortedUsers = response.data.users.sort((a, b) => b.user_id - a.user_id);
+        setUsers(sortedUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -57,10 +59,12 @@ export default function CustomerInformation() {
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {currentUsers
-              .filter(user => user.role === 'USER')
+              .filter((user) => user.role === "USER")
               .map((user, index) => (
                 <tr key={user.user_id} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-left whitespace-nowrap">{indexOfFirstItem + index + 1}</td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    {user.user_id}
+                  </td>
                   <td className="py-3 px-6 text-left">{user.username}</td>
                   <td className="py-3 px-6 text-left">{user.email}</td>
                   <td className="py-3 px-6 text-left">{user.firstname}</td>
@@ -75,7 +79,9 @@ export default function CustomerInformation() {
       {/* Pagination (อยู่ภายนอก div ของตาราง) */}
       <div className="flex justify-center mt-4">
         <button
-          className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'} rounded`}
+          className={`px-4 py-2 mx-1 ${
+            currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
+          } rounded`}
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -84,14 +90,18 @@ export default function CustomerInformation() {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i + 1}
-            className={`px-4 py-2 mx-1 ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'} rounded`}
+            className={`px-4 py-2 mx-1 ${
+              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-300"
+            } rounded`}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}
           </button>
         ))}
         <button
-          className={`px-4 py-2 mx-1 ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'} rounded`}
+          className={`px-4 py-2 mx-1 ${
+            currentPage === totalPages ? "bg-gray-300" : "bg-blue-500 text-white"
+          } rounded`}
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
         >

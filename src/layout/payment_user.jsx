@@ -152,7 +152,7 @@ export default function PaymentUser() {
             confirmButton: "btn btn-success",
           },
         });
-        navigate(`/receipt/${rs2.data.receipt.Recipt_id}`);
+        navigate(`/ReservationForm_user`);
       }
     } catch (err) {
       Swal.fire({

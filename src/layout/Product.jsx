@@ -13,8 +13,11 @@ export default function Product() {
   const [product, setProduct] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(null);
   const productsPerPage = 6;
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const getProduct = async () => {
@@ -29,17 +32,29 @@ export default function Product() {
   }, []);
 
   const hdlbooking = async (id) => {
-    try{
-      const rs = await axios.get(`http://localhost:8889/admin/booking/table/${id}`)
-      if(rs.status === 200){
-        navigate(`/Booking_details/${id}`);
+    if(token){
+      try{
+        const rs = await axios.get(`http://localhost:8889/admin/booking/table/${id}`);
+        if(rs.status === 200){
+          navigate(`/Booking_details/${id}`);
+        }
+      }catch(err){
+        Swal.fire({
+          icon: 'warning',
+          text: err.response.data.message,
+          title: 'เกิดข้อผิดพลาด',
+        });
       }
-    }catch(err){
+    }else{
       Swal.fire({
-        icon: 'warning',
-        text: err.response.data.message,
-        title: 'เกิดข้อผิดพลาด',
-      })
+        icon: 'info',
+        title: "กรุณาเข้าสู่ระบบ",
+        text: "กรุณาเข้าสู่ระบบหรือสมัคสมาชิก"
+      }).then((res) => {
+        if(res.isConfirmed){
+          navigate('/login');
+        }
+      });
     }
   };
 
@@ -49,6 +64,14 @@ export default function Product() {
 
   const closeModal = () => {
     setSelectedProduct(null);
+  };
+
+  const openImageModal = (imgUrl) => {
+    setSelectedImage(imgUrl);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
   };
 
   // Pagination logic
@@ -80,8 +103,9 @@ export default function Product() {
               <figure className="px-5 pt-5">
                 <img
                   src={product.Tables_img}
-                  className="rounded-t-xl w-full h-60 object-cover"
-                  onClick={() => openModal(product)}
+                  className="rounded-t-xl w-full h-60 object-cover cursor-pointer transition-transform duration-150 ease-in-out hover:scale-105"
+                  onClick={() => openImageModal(product.Tables_img)}
+                  alt="Product"
                 />
               </figure>
               <div className="p-4">
@@ -107,7 +131,7 @@ export default function Product() {
         </div>
 
         {selectedProduct && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center mt-20">
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center mt-20 z-50">
             <div className="bg-white rounded-lg shadow-lg p-8 w-1/3">
               <h2 className="text-2xl mb-4">รายละเอียดโต๊ะเเละอาหาร :</h2>
               <p className="text-lg mb-2"> {selectedProduct.Tables_details}</p>
@@ -115,6 +139,15 @@ export default function Product() {
               <div className="flex justify-end">
                 <button onClick={closeModal} className="btn btn-outline btn-danger font-semibold py-2 px-4 rounded-lg mr-2">ปิด</button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {selectedImage && (
+          <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300">
+            <div className="relative">
+              <img src={selectedImage} alt="Enlarged" className="max-w-full max-h-screen rounded-lg shadow-lg" />
+              <button onClick={closeImageModal} className="absolute top-2 right-2 text-white text-2xl">&times;</button>
             </div>
           </div>
         )}
@@ -184,7 +217,7 @@ export default function Product() {
               </div>
               <div className="flex gap-8 items-center mt-2">
                 <a
-                  href="https://www.google.com/search?q=line&oq=&gs_lcrp=EgZjaHJvbWUqCQgBECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyCQgFECMYJxjqAjIJCAYQIxgnGOoCMgkIBxAjGCcY6gLSAQkxNTMyajBqMTWoAgiwAgE&sourceid=chrome&ie=UTF-8"
+                  href="https://line.me/en/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
@@ -195,35 +228,29 @@ export default function Product() {
               </div>
               <div className="flex gap-8 items-center mt-2">
                 <a
-                  href="https://x.com/home?lang=th"
+                  href="https://twitter.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
                 >
                   <ImTwitter size={30} />
-                  <span className="text-lg">: twitter</span>
+                  <span className="text-lg">: Twitter</span>
                 </a>
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <div>
-                <h2 className="text-xl font-bold mb-2">CONTACT</h2>
-                <div className="flex items-center mb-2">
-                  <CiLocationOn size={20} />
-                  <span className="ml-2">SAWSAMSAI CATERING SERVICE</span>
-                </div>
-                <div className="flex items-center mb-2">
-                  <CiLocationOn size={20} />
-                  <span className="ml-2">บริษัท ซอว์แซมไส้</span>
-                </div>
-                <div className="flex items-center mb-2">
-                  <BiPhoneCall size={20} />
-                  <span className="ml-2">123-456-7890</span>
-                </div>
-                <div className="flex items-center mb-2">
-                  <BsEnvelopeOpen size={20} />
-                  <span className="ml-2">info@sawsamsaicatering.com</span>
-                </div>
+            <div>
+              <h2 className="text-xl font-bold mb-2">CONTACT US</h2>
+              <div className="flex gap-8 items-center">
+                <CiLocationOn size={30} />
+                <span className="text-lg">123 Your Address, City, Country</span>
+              </div>
+              <div className="flex gap-8 items-center mt-2">
+                <BiPhoneCall size={30} />
+                <span className="text-lg">+123-456-7890</span>
+              </div>
+              <div className="flex gap-8 items-center mt-2">
+                <BsEnvelopeOpen size={30} />
+                <span className="text-lg">email@example.com</span>
               </div>
             </div>
           </div>

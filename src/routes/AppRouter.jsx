@@ -14,11 +14,12 @@ import Payment from "../layout/payment";
 import Recipt from "../layout/recipt";
 import Check_information from"../layout/Check_information";
 import Payment_user from "../layout/payment_user";
-import recipt_user from "../layout/recipt_uset";
+import Recipt_user from "../layout/recipt_uset";
 import Receipt_Front from "../layout/Receipt_Front";
 import ContactForm from "../layout/ContactForm";
 import Adminhome from "../layout/AdminHome";
 import ReservationForm_user from "../layout/ReservationForm_user";
+import WaittingPayment from "../layout/WaittingPayment";
 
 const guesRouter = createBrowserRouter([
   {
@@ -32,14 +33,14 @@ const guesRouter = createBrowserRouter([
     ),
     
     children: [
-      { index: true, element: <LoginForm /> },
+      { index: true, element: <UserHome /> },
       { path: "/register", element: <RegisterForm /> },
       { path: "/home", element: <UserHome /> }, 
       { path: "/login", element: <LoginForm /> },
       { path: "/product", element: <Product /> },
       { path: "/Product_details", element: <Product_details/> },
       { path: "/Customer_information",element:<Customer_information/>},
-      { path:"/recipt_user",element:<recipt_user/>},
+      { path:"/recipt_user",element:<Recipt_user/>},
       {path:"/payment_user/*",element:<Payment_user/>},
     ],
   },
@@ -60,6 +61,7 @@ const userRouter = createBrowserRouter([
       { path: "/home", element: <UserHome /> },
       { path: "/login", element: <LoginForm /> },
       { path: "/product", element: <Product /> },
+      { path: "/WaittingPayment", element: <WaittingPayment /> },
       { path: "/Product_details", element: <Product_details/> },
       { path: "/Booking_details/*", element: <Booking_details/> },
       { path: "/Customer_information",element:<Customer_information/>},
@@ -69,7 +71,7 @@ const userRouter = createBrowserRouter([
       { path:"/recipt",element:<Recipt/>},
       { path:"/check",element:<Check_information/>},
       {path:"/payment_user/*",element:<Payment_user/>},
-      { path:"/recipt_user",element:<recipt_user/>},
+      { path:"/recipt_user",element:<Recipt_user/>},
       { path: "*", element: <p>Error 404</p>},
       { path:"/receipt/*",element:<Receipt_Front />},
       { path:"/ContactForm",element:<ContactForm />},

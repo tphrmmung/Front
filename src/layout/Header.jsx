@@ -3,13 +3,14 @@ import useAuth from "../hooks/userAuth";
 
 const guestNav = [
   { to: "/home", text: "หน้าหลัก" },
-  { to: "/", text: "เข้าสู่ระบบ" },
+  { to: "/product", text: "รายการโต๊ะ" },
 ];
 
 const userNav = [
   { to: "/home", text: "หน้าหลัก" },
   { to: "/product", text: "รายการโต๊ะ" },
-  { to: "/ReservationForm_user", text: "ประวัติการจอง" },
+  { to: "/WaittingPayment", text: "ประวัติการจอง" },
+  { to: "/ReservationForm_user", text: "ประวัติการชำระเงิน" },
   { to: "/ContactForm", text: "ติดต่อเรา" }
 ];
 
@@ -50,36 +51,60 @@ export default function Header() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-40 text-red-900"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-40 text-red-900 "
           >
             {finalNav.map((el) => (
               <li key={el.to}>
-                <Link to={el.to} className="text-red-900 hover:text-black">{el.text}</Link>
+                <Link to={el.to} className="text-red-900  hover:text-black">{el.text}</Link>
               </li>
             ))}
           </ul>
         </div>
-        <a className="label-text-alt text-sm font-bold text-red-900">
-          {user?.user_id ? `สวัสดี ${user.username}` : "สวัสดีคุณ"}
-        </a>
+        <div className="text-2xl text-red-900 font-bold">
+        TarnTip เซ็นเตอร์โต๊ะจีน
+        </div>
       </div>
       <div className="navbar-center hidden lg:flex text-sm">
         <ul className="menu menu-horizontal px-1">
           {finalNav.map((el) => (
             <li key={el.to}>
-              <Link to={el.to} className="text-red-900 bg-white">{el.text}</Link>
+              <Link to={el.to} className="text-red-900 bg-white text-sn font-bold  ">{el.text}</Link>
             </li>
           ))}
         </ul>
       </div>
+      
       <div className="list-none navbar-end label-text-alt text-sm font-bold">
+      <a className="label-text-alt  text-red-900 mr-10 text-lg">
+          {user?.user_id ? `สวัสดี ${user.username}` : "สวัสดีคุณ"}
+        </a>
+        <div className="dropdown dropdown-end">
+        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar  ">
+        <div className="w-10 rounded-full">
+        <img
+            alt="Tailwind CSS Navbar component"
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+
+        </div>
+        </div>
+        <ul
+        tabIndex={0}
+        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+        <li>
+        <li onClick={ () => navigate('/login')}>เข้าสู่ระบบ</li>
+      </li>
+        <div className="font-bold" >
         {user?.user_id && (
           <li>
-            <Link to="/" onClick={hdlLogout} className="text-red-900 bg-white">
+            <li onClick={hdlLogout} >
               ออกจากระบบ
-            </Link>
+            </li>
           </li>
         )}
+        </div>
+      </ul>
+        </div>
+        
       </div>
     </div>
   );
